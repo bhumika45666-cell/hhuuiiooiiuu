@@ -44,9 +44,11 @@ async function saveAppointment({ name, phone, service, date, time }) {
     return null;
   }
   try {
+    console.log(`Saving appointment: ${name} - ${service} on ${date} at ${time}`);
     const result = await makeRequest(url, 'POST', { name, phone, service, date, time });
+    console.log('Apps Script response:', JSON.stringify(result));
     if (result && result.success) {
-      console.log(`Appointment saved: ${name} - ${service} on ${date} at ${time}`);
+      console.log(`Appointment saved successfully: ${name} - ${service} on ${date} at ${time}`);
       return result;
     } else {
       console.error('Failed to save appointment:', result?.error || 'unknown error');
