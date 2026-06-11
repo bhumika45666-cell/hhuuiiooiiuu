@@ -20,6 +20,30 @@ function makeRequest(url, method, data) {
     if (body) options.headers['Content-Length'] = Buffer.byteLength(body);
 
     const req = lib.request(options, res => {
+      if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+        const redirectUrl = new URL(res.headers.location, url);
+        const redirectLib = redirectUrl.protocol === 'https:' ? https : http;
+        const redirectOptions = {
+          hostname: redirectUrl.hostname,
+          path: redirectUrl.pathname + redirectUrl.search,
+          method: 'GET',
+        };
+        const redirectReq = redirectLib.request(redirectOptions, redirectRes => {
+          let redirectData = '';
+          redirectRes.on('data', chunk => { redirectData += chunk; });
+          redirectRes.on('end', () => {
+            try {
+              resolve(JSON.parse(redirectData));
+            } catch {
+              resolve(redirectData);
+            }
+          });
+        });
+        redirectReq.on('error', reject);
+        redirectReq.end();
+        return;
+      }
+
       let responseData = '';
       res.on('data', chunk => { responseData += chunk; });
       res.on('end', () => {
