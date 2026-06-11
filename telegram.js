@@ -12,7 +12,7 @@ function getHistory(chatId) {
 }
 
 function isConfirmation(text) {
-  const words = ['yes', 'yeah', 'yep', 'sure', 'confirm', 'go ahead', 'ok', 'okay', 'correct', 'right', 'do it'];
+  const words = ['yes', 'yeah', 'yep', 'sure', 'confirm', 'go ahead', 'ok', 'okay', 'correct', 'right', 'do it', 'book it'];
   const lower = text.toLowerCase().trim();
   return words.some(w => lower === w || lower.startsWith(w + ' ') || lower.endsWith(' ' + w) || lower.includes(' ' + w + ' '));
 }

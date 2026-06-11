@@ -176,7 +176,7 @@ async function getAIResponse(conversationHistory) {
     const text = completion.choices[0]?.message?.content || '';
     const bookingData = extractBooking(text);
     const cleanText = text.replace(/<BOOKING>[\s\S]*?<\/BOOKING>/, '').trim();
-    return { text: cleanText || text, booking: bookingData };
+    return { text: cleanText, booking: bookingData };
   } catch (err) {
     console.error('AI API error:', err.message);
     return { text: 'Sorry, I am having trouble connecting right now. Please try again in a moment.', booking: null };
